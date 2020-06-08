@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="header">
+            <div class="container">
+                <div class="logo">toDoList</div>
+                <div class="input-area">
+                    <input type="text" @input="handleInput" :value='inputValue' @keydown.enter="addValue">
+                    <button @click="addValue">添加</button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h2>
+                <span>正在进行</span>
+                <span class="mask-num">{{needdolist.length}} </span>
+            </h2>
+            <ul class="mask-list">
+                <li v-for="(item,index) in needdolist" :key="item.id">
+                    <div>
+                        <input type="checkbox" @change="statusChange(index,'need')">
+                        <span>
+                            {{item.title}}
+                        </span>
+                    </div>
+                    <button @click="deleteData(index,'need')">删除</button>
+                </li>
+            </ul>
+        </div>
+        <div class="container">
+            <h2>
+                <span>正在进行</span>
+                <span class="mask-num">{{finishList.length}} </span>
+            </h2>
+            <ul class="mask-list complete-list">
+                <li v-for="(data,index) in finishList" :key="data.id">
+                    <div>
+                        <input type="checkbox" @change="statusChange(index,'finish')">
+                        <span>{{data.title}} </span>
+                    </div>
+                    <button @click="deleteData(index,'finish')">删除</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            el: "#app",
+            data: {
+                inputValue: '',
+                needdolist: [],
+                finishList: []
+            },
+            methods: {
+                handleInput: function (e) {
+                    this.inputValue = e.target.value;
+                },
+                addValue: function (e) {
+                    if (this.inputValue == '') {
+                        return;
+                    }
+                    this.needdolist.push({ title: this.inputValue, id:Math.random() });
+                    this.inputValue = '';
+                    console.log(this.needdolist)
+                },
+                statusChange: function (index,status) {
+                    if (status == 'need') {
+                        const finishData = this.needdolist.splice(index, 1);
+                        this.finishList.push(...finishData);
+                    }else if(status == 'finish'){
+                        const needData = this.finishList.splice(index,1);
+                        this.needdolist.push(...needData)
+                    }
+                },
+                deleteData: function(index,status){
+                    const thisList = status == 'need' ? this.needdolist : this.finishList; 
+                    thisList.splice(index,1);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
