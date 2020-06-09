@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="../vue.js"></script>
+    <div id="app">
+        <input type="text" v-model.number='numA'>
+        <select v-model='Calculation'>
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" v-model.number='numB'>
+        <button @click='comeTo'> = </button>
+        <span>{{result}} </span>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el:'#app',  
+            data:{
+                numA: 0,
+                Calculation:'+',
+                numB:0,
+                result: 0
+            },
+            methods:{
+                comeTo:function(e){
+                   const {numA,Calculation,numB} = this;
+                   switch(Calculation){
+                        case '+' : this.result = numA + numB; break;
+                        case '-' : this.result = numA - numB; break;
+                        case '*' : this.result = numA * numB; break;
+                        case '/' : this.result = numA / numB; break;
+                   }
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
